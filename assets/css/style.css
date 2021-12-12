@@ -81,6 +81,8 @@ textarea{
 }
 
 .eventWritingForm {
-  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  border-style: none;
+  height: 75%;
   width: 100%;
 }

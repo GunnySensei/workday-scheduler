@@ -45,8 +45,8 @@ const timeSlots = [
     }];
 
 var dateEl = document.getElementById('currentDay');
-var containerEl = document.getElementById("container");
-
+var containerEl = document.getElementById('container');
+var eventInfo = [];
 
 //functions
 
@@ -75,33 +75,34 @@ var printTimeBlocks = function() {
         containerSections.appendChild(blockEl);
 
         var timeInSlot = document.createElement("p");
-        timeInSlot.id = "timeInSlot"  + timeSlots.indexOf();
+        timeInSlot.id = "timeInSlot"  + i;
         timeInSlot.classList = "hour";
         timeInSlot.textContent = timeSlots[i].written;
         blockEl.appendChild(timeInSlot);
 
         var eventWritingSection = document.createElement("p");
-        eventWritingSection.id = "eventWritingSection"  + timeSlots.indexOf();
+        eventWritingSection.id = "eventWritingSection"  + i;
         eventWritingSection.textContent = " ";
         eventWritingSection.classList = "past col-9";
         containerSections.appendChild(eventWritingSection);
 
-        var eventWritingForm = document.createElement('form');
+        var eventWritingForm = document.createElement('input');
         eventWritingForm.id = "eventWritingForm";
-        eventWritingForm.textContent = ' ';
+        eventWritingForm.value = '';
         eventWritingForm.classList = 'eventWritingForm';
         eventWritingSection.appendChild(eventWritingForm);
 
         var saveButtonSlot = document.createElement("p");
-        saveButtonSlot.id = "saveButtonSlot" + timeSlots.indexOf();
+        saveButtonSlot.id = "saveButtonSlot" + i;
         saveButtonSlot.classList = "saveBtn col-1";
         containerSections.appendChild(saveButtonSlot);
 
         var saveButton = document.createElement("button");
-        saveButton.id = "saveButton" + timeSlots.indexOf();
+        saveButton.id = "saveButton" + i;
         saveButton.classList = "saveBtnKiddo";
         saveButton.innerHTML = "<span class='glyphicon glyphicon-floppy-save'></span>"
         saveButtonSlot.appendChild(saveButton);
+        saveButton.addEventListener("click", saveData);
 
         //check current time vs time of slot and add class
         if(currentTime === timeSlots[i].numeric){
@@ -117,13 +118,39 @@ var printTimeBlocks = function() {
 
 }
 
-var editScheduleText = function () {
-    formEl.textContent = window.prompt("Write your event here!")
+var saveData = function() {
+    for(var i = 0; i < timeSlots.length; i++){
+        eventInfo[i] = eventWritingForm[i].value;
+        console.log(eventInfo[i]);
+    }
+    localStorage.setItem("schedule", JSON.stringify(eventInfo));
+}
+
+var loadSchedule = function () {
+    var savedInfo = localStorage.getItem("schedule");
+
+    if(!savedInfo) {
+        return false;
+    }
+
+    console.log("Found Saved Schedule!")
+
+    savedInfo = JSON.parse(savedInfo);
+    console.log(savedInfo);
+
+    //take the values of savedInfo and set the values of each eventWritingForm
+    for(var i = 0; i < savedInfo.length; i++) {
+        if(savedInfo[i].value = '') {
+            eventWritingForm[i].value = ' ';
+        }
+        else {
+            eventWritingForm[i].value = savedInfo[i];
+        }
+        console.log(eventWritingForm[i].value);
+        
+    }
   }
 
 
 printTimeBlocks();
-
-var formEl = document.querySelector('#eventWritingForm');
-
-formEl.addEventListener("click", editScheduleText);
+loadSchedule();
