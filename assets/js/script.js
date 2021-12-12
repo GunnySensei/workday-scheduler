@@ -2,6 +2,7 @@
 
 //for getDate
 const date = new Date;
+var currentTime;
 const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
 
 //for timeblocks
@@ -50,7 +51,7 @@ var containerEl = document.getElementById("container");
 
 var getDate = function() {
     var currentDate = (date.toLocaleDateString(undefined, options));
-    var currentTime = date.toLocaleTimeString([], {hour: '2-digit', hour12: false});
+    currentTime = date.toLocaleTimeString([], {hour: '2-digit', hour12: false});
     dateEl.textContent = currentDate;
     currentTime = parseInt(currentTime);
     console.log(currentTime);
@@ -59,6 +60,10 @@ var getDate = function() {
 
 var printTimeBlocks = function() {
     for(var i = 0; i < timeSlots.length; i++) {
+        //run to check current time during loop
+        getDate();
+
+        //create sections
         var containerSections = document.createElement("div");
         containerSections.classList = "row d-flex flex-row";
         containerSections.id = "containerSections";
@@ -91,16 +96,19 @@ var printTimeBlocks = function() {
         saveButton.innerHTML = "<span class='glyphicon glyphicon-floppy-save'></span>"
         saveButtonSlot.appendChild(saveButton);
 
-        while(currentTime >= 9 && currentTime <= 5){
-            currentTime = currentTime - 9;
-
+        //check current time vs time of slot and add class
+        if(currentTime === timeSlots[i].numeric){
+            eventWritingSection.classList = "present col-9";
+        }
+        else if(currentTime < timeSlots[i].numeric){
+            eventWritingSection.classList = "future col-9";
+        }
+        else if (currentTime > timeSlots[i].numeric){
+            eventWritingSection.classList = "past col-9";
         }
     }
-    
 
 }
 
 
-
 printTimeBlocks();
-getDate();
