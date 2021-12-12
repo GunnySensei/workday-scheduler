@@ -47,6 +47,7 @@ const timeSlots = [
 var dateEl = document.getElementById('currentDay');
 var containerEl = document.getElementById("container");
 
+
 //functions
 
 var getDate = function() {
@@ -85,6 +86,12 @@ var printTimeBlocks = function() {
         eventWritingSection.classList = "past col-9";
         containerSections.appendChild(eventWritingSection);
 
+        var eventWritingForm = document.createElement('form');
+        eventWritingForm.id = "eventWritingForm";
+        eventWritingForm.textContent = ' ';
+        eventWritingForm.classList = 'eventWritingForm';
+        eventWritingSection.appendChild(eventWritingForm);
+
         var saveButtonSlot = document.createElement("p");
         saveButtonSlot.id = "saveButtonSlot" + timeSlots.indexOf();
         saveButtonSlot.classList = "saveBtn col-1";
@@ -110,5 +117,13 @@ var printTimeBlocks = function() {
 
 }
 
+var editScheduleText = function () {
+    formEl.textContent = window.prompt("Write your event here!")
+  }
+
 
 printTimeBlocks();
+
+var formEl = document.querySelector('#eventWritingForm');
+
+formEl.addEventListener("click", editScheduleText);

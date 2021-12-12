@@ -79,3 +79,8 @@ textarea{
   border: none;
   background: none;
 }
+
+.eventWritingForm {
+  height: 100%;
+  width: 100%;
+}
